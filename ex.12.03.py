@@ -2,7 +2,7 @@
 # Chapter 12.3 - Unicode Characters and Strings
 
 # ord () function shows ASCII codes of the characters.
-print(ord('H'))
+print(ord('G'))
 print(ord('e'))
 print(ord('l'))
 print(ord('o'))
@@ -12,6 +12,7 @@ print(ord('\n'))
 # 108
 # 111
 # 10
+print ( chr(108),chr(105), chr(110), chr(101))
 
 # In Python 3, all strings internally are UNICODE
 # Working with string variables in Python programs and reading data from files usually "just works" 
