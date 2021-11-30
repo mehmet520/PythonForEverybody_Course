@@ -12,14 +12,15 @@ ctx.verify_mode= ssl.CERT_NONE
 url='https://pythonprogramming.net/parsememcparseface/'
 print(url)
 htmlraw=urllib.request.urlopen(url, context=ctx).read()
+print(htmlraw)
 # print('\nhtml Byte String: \n', htmlraw)
 soup=BeautifulSoup(htmlraw, 'html.parser')
 # print('\nsoup html tree : \n', soup)
 
 # Retrieve all of the anchor tags
 tags=soup('a')
-for tag in tags:
-    print ()
+# for tag in tags:
+#     print ()
     # print (tag.get('href', None))
 # print(tags)
 # print( soup('head'))
