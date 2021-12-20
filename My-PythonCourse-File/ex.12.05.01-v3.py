@@ -16,7 +16,8 @@ nav=soup.nav
 #     print(div.text)
 for paragraph in soup.find_all('p'):
     # print('1. paragraph.string, '\n')
-    print (str(paragraph.text))
+    # print (str(paragraph.text))
+    print (paragraph.text)
 
 # title of the page
 print(soup.title)

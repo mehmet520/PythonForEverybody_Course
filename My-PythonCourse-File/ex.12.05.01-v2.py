@@ -12,4 +12,6 @@ print()
 # print (soup.get_text())
 for url in soup.find_all('a'):
     print(url.get('href'))
+# for url in soup.find_all('a', href='/register/'):
+#     print(url.get('href'))
 print()
