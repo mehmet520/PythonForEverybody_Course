@@ -19,8 +19,8 @@ while True:
     acct = input ('Enter Twitter Account:')
     if (len(acct)<1): break
     url = twurl.augment (TWITTER_URL, {'screen_name': acct, 'count': '2'})
-    print ('\nRetrieving: \n, url')
-    connection = urllib.request.urlopen(rul, context=ctx)
+    print ('\nRetrieving: \n', url)
+    connection = urllib.request.urlopen(url, context=ctx)
     data = connection.read().decode()
     print ('\ndata: \n', data[:250])
     print('==========================================')

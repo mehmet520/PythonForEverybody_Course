@@ -7,7 +7,7 @@ import ssl
 
 print('* Calling Twitter...')
 search_url = "https://api.twitter.com/2/tweets/search/all"
-url = augment('serch_url', {'screen_name': '@MehmetY70026537', 'count': '2'})
+url = augment("https://api.twitter.com/2/tweets/search/all", {"screen_name": "MehmetY70026537", "count": "2"})
                 # {'screen_name': '@drchuck', 'count': '2'})                
 print('\nurl:\n', url)
 

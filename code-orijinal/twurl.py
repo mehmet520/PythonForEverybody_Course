@@ -29,3 +29,4 @@ def test_me():
     print(data)
     headers = dict(connection.getheaders())
     print(headers)
+test_me()
