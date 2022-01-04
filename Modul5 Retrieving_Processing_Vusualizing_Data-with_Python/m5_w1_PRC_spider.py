@@ -93,9 +93,9 @@ while True:
     cur.execute('DELETE FROM Links WHERE from_id=?', (fromid,))    
     try:
         document = urlopen(url, context = ctx)
-        print('96 docement: ', document)
+        print('\n96 docement: ', document)
         html = document.read()
-        print('98 html: ', html)
+        # print('98 html: ', html)
         if document.getcode() != 200 :
             print('\ndocument.getcode(): ', document.getcode())
             print(' Error on page: ', document.getcode())
@@ -110,7 +110,7 @@ while True:
         print('html_lengt: ( '+str(len(html))+' )', end=' ')
 
         soup = BeautifulSoup(html, 'html.parser')
-        print('\n113 soup: ', soup)
+        # print('\n113 soup: ', soup)
     except KeyboardInterrupt:
         print('')
         print('Program interrupted by user...')
@@ -120,3 +120,64 @@ while True:
         cur.execute('UPDATE Pages SET error=-1 WHERE url=?', (url,))
         conn.commit()
         continue
+    
+    cur.execute('''INSERT OR IGNORE INTO Pages (url, html, new_rank)
+                VALUES (?, NULL, 1.0)''', ( url,))
+    cur.execute('UPDATE Pages SET html=? WHERE url=?', (memoryview(html), url) )
+    conn.commit()
+    # Retrieve all of the anchor tags
+    tags = soup('a')
+    print('\n130 All tags: \n', tags)
+    count = 0
+    for tag in tags:
+        a=input('133 Begining of the loop, continue?')
+        print('tag: ', tag)
+        href = tag.get('href', None)
+        print('136 href: ', href)
+        if (href is None) : continue
+        # Resolve relative references like href="/contact"
+        # The return value from the urlparse() function is an object which acts like a tuple with 6 elements.
+        # The parts of the URL available through the tuple interface are the:
+        # scheme, network location, path, parameters, query, and fragment.
+        up = urlparse(href)
+        if (len(up.scheme) < 1) :
+            # urljoin (base, url, allow_fragments=True) Construct a full (“absolute”) URL
+            # by combining a “base URL” (base) with another URL (url).Informally, this uses components of the base URL, in particular the addressing scheme, the network location and (part of) the path, to provide missing components in the relative URL.
+            href = urljoin(url, href)
+        ipos = href.find('#')
+        if ( ipos > 1 ) : href = href[:ipos]
+        if (href.endswith('.png') or href.endswith('.jpg)') or href.endswith('.gif') ) : continue
+        if ( href.endswith('/') ) : href = href[:-1]
+        print('\nhref: ', href)
+        if ( len(href) < 1 ) : continue
+
+        # Check if the URL is in any of the webs
+        found = False
+        for web in webs:
+            if ( href.startswith(web) ) :
+                found = True
+                print('\n155 found=True: break ', found)
+                break
+        if not found:
+            print('\n158 not found: continue, bool: ', bool(not found))
+            continue
+
+        print('href insert ediliyor')
+        cur.execute('''INSERT OR IGNORE INTO Pages(url, html, new_rank) 
+                    VALUES(?, NULL, 1.0)''', (href,) )
+        count = count + 1
+        conn.commit()
+
+        cur.execute('SELECT id FROM Pages WHERE url=? LIMIT 1', (href,) )
+        try:
+            row = cur.fetchone()
+            toid = row[0]
+        except:
+            print('Could not retrieve id')
+            continue
+        print ('\nFrom_id: ', fromid, '\nTo_id  : ', toid)
+        cur.execute('INSERT OR IGNORE INTO Links (from_id, to_id) VALUES (?, ?)', (fromid, toid) )
+    
+    print('count: ', count)
+
+cur.close()
