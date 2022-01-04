@@ -95,9 +95,9 @@ while True:
         document = urlopen(url, context = ctx)
         print('96 docement: ', document)
         html = document.read()
-        print('html: ', html)
+        print('98 html: ', html)
         if document.getcode() != 200 :
-            print('document.getcode(): ', document.getcode())
+            print('\ndocument.getcode(): ', document.getcode())
             print(' Error on page: ', document.getcode())
             cur.execute('UPDATE Pages SET error = ? WHERE url = ?', (document.getcode(), url))
 
@@ -110,6 +110,7 @@ while True:
         print('html_lengt: ( '+str(len(html))+' )', end=' ')
 
         soup = BeautifulSoup(html, 'html.parser')
+        print('\n113 soup: ', soup)
     except KeyboardInterrupt:
         print('')
         print('Program interrupted by user...')
